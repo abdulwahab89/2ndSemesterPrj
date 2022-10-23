@@ -1,26 +1,22 @@
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.*;
 import java.io.*;
 public class Transaction {
-    final int MONTHS_DAYS = 30, MONTHS = 12; //lets assume that 30 is one month for every month in this program
-    private Customer aCustomer; //from the Customer class in same directory
-    private Car aCar; //frm the Customer class in same directory
+    final int MONTHS_DAYS = 30, MONTHS = 12;
+    private Customer aCustomer;
+    private Car aCar;
     private int monthe = 0, days = 0;
 
     private String CurrentMonth;
     private int CurrentDate, Currentyear;
-
     private String PickMonth;
     private int PickDate, PickYear;
-
     private String returnMonth;
     private int returnDate, returnYear;
-
     private String birthMonth;
     private int birthDate, birthYear, age = 0;
 
-    public Transaction() { //constructor
+    public Transaction() {
         aCustomer = new Customer();
         aCar = new Car();
         CurrentMonth = "";
@@ -65,8 +61,7 @@ public class Transaction {
     public int getCurrentYear() {
         return Currentyear;
     }
-    ////////////////////////////////////////////getting the value of current month/////////////////
-    public int getCurrentMonthValue() {
+   public int getCurrentMonthValue() {
         if(getCurrentMonth().equals("Jan"))
             monthe = 1;
 
@@ -118,7 +113,6 @@ public class Transaction {
         return PickYear;
     }
 
-    //////////////////////////////////////getting the value of pick up month///////////////////////////
     public int getPickMonthValue() {
         if(getPickMonth().equals("Jan"))
             monthe = 1;
@@ -169,7 +163,6 @@ public class Transaction {
         return returnYear;
     }
 
-    /////////////////////////////////getting the value of return month////////////////////////////
     public int getReturnMonthValue() {
         if(getReturnMonth().equals("Jan"))
             monthe = 1;
@@ -221,7 +214,6 @@ public class Transaction {
         return birthYear;
     }
 
-    //////////////////////////////////////getting the value of birth month////////////////////////////
     public int getBirthMonthValue() {
         if(getBirthMonth().equals("Jan"))
             monthe = 1;
@@ -261,7 +253,6 @@ public class Transaction {
 
         return monthe;
     }
-    //////////////////////////////////////////////getting the age///////////////////////////////////
     public int getAge(){
         int age=0;
         LocalDate pdate = LocalDate.of(getBirthYear(), getBirthMonthValue(), getBirthDate());
@@ -273,7 +264,6 @@ public class Transaction {
       return age;
     }
 
-    ///////////////////////for getting How many days Car has been rented/////////////////
     public int getDays(){
         int totalMonth = 0, totalYear = 0;
 
@@ -315,13 +305,9 @@ public class Transaction {
         return days;
     }
 
-    ///////////////////////////to get the total Rental price/////////////////////////////////
     public double getRentalPrice() {
-
-        return getDays() * aCar.getCarPrice();
+        return getDays() * aCar.carPrice;
     }
-
-    //////////////////////////////////////change to String for checking the date////////////////////////
     public String toStringDateChecker() {
         String outpot = "";
         if((getPickMonthValue() > getReturnMonthValue()) && (getPickYear() == getReturnYear()))
@@ -339,7 +325,6 @@ public class Transaction {
         return outpot;
     }
 
-    //////////////////////////////////////////change to String for checking the age of customer/////////////////////
     public String toStringAgeChecker() {
         String output = "";
 
@@ -377,8 +362,6 @@ public class Transaction {
     //////////////////////////////////////////show all for customer///////////////////////////////////
     public String toStringReceipt() {
         String output = "";
-
-        //outMe += String.format(toStringMrMrs() + aCustomer.getFullName());
         output += String.format("               	             Wahab's Car Rental\n");
         output += String.format("                              Owned & Operated By:\n");
         output += String.format("                                      AWAHAB\n");
@@ -386,16 +369,14 @@ public class Transaction {
         output += String.format("-----------------------------------------------------------------------------------------------------\n");
         output += String.format("Car                                                        %s\n", aCar.getCar());
         output += String.format("Rental Days                                                %d\n", getDays());
-        output += String.format("Rental Price                                               %.2f\n", aCar.getCarPrice());
+        output += String.format("Rental Price                                               %.2f\n", aCar.carPrice);
         output += String.format("                                                           --------------\n");
         output += String.format("Total Payment                                              %.2f\n",getRentalPrice());
         output += String.format(toStringMrMrs() + aCustomer.getFullName());
         return output;
     }
 
-    ////////////////////////////////////////////save all data to .txt file for the Owner//////////////////////////////
-  public void saveToFile() throws IOException {
-
+   public void saveToFile() throws IOException {
         PrintWriter outFile = new PrintWriter(new FileOutputStream(new File("Transactions_Inventory.txt"), true));
         outFile.println("Current Date: " + getCurrentMonth() + " " + getCurrentDate() + ", " + getCurrentYear());
         outFile.println(" ");

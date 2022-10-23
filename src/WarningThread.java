@@ -5,7 +5,7 @@ public class WarningThread extends JFrame  implements Runnable{
     private JPanel warningP;
     private JLabel textL, iconL;
 
-    private Transaction aTrans = new Transaction(); //access my class Transaction as global declaration
+    private Transaction aTrans = new Transaction();
     @Override
     public void run(){
     Container pane = getContentPane();

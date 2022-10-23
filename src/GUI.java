@@ -2,56 +2,44 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUI extends JFrame{
-    private final JLabel ow;
-    private Transaction aTrans = new Transaction(); //access my class Transaction as global declaration
-    private Customer aCustomer = new Customer(); //access class Customer as global declaration
-    private Car aCar = new Car(); //access class car as global declaration
-    WarningReserve openWarningReserve; //another class to access warning window
+JLabel ow;
+     Transaction aTrans = new Transaction();
+     Customer aCustomer = new Customer();
+      Car aCar = new Car();
+    WarningReserve openWarningReserve;
     WarningThread openWarningCustomer;
     Container pane = getContentPane();
-    private JPanel mainP, reserveP, customerP, carP, finalP; //panels for CardLayout
+    private JPanel mainP, reserveP, customerP, carP, finalP;
+    private JLabel titleL, dateL;
 
-    //////////////////////////////////////////////welcome////////////////////////////////////////////////////
-
-    //Labels
-    private JLabel titleL, dateL; //inside the panel of mainP
-
-    private JLabel dayL, pickupDateL, returnDateL, birthDateL; //inside the panel of reserveP
+    private JLabel dayL, pickupDateL, returnDateL, birthDateL;
     private JLabel dateChecker, ageChecker;
-    private JLabel customerL, firstNameL, lastNameL, locationL, contactL, genderL, ageL, statusL, showAgeL; //inside the panel of customerP
+    private JLabel customerL, firstNameL, lastNameL, locationL, contactL, genderL, ageL, statusL, showAgeL;
 
     private JLabel firstNameChecker, lastNameChecker, genderChecker, statusChecker, locationChecker, contactChecker;
 
-    private JLabel carL; //inside the panel of carP
+    private JLabel carL;
 
-    //////////////////////////////BUTTONS////////////////////////////////
-    private JButton mainNextB; //Button in main page to go to next section.
+    private JButton mainNextB;
     private JButton reserveNextB, reserveBackB;
     private JButton customerNextB, customerBackB;
     private JButton firstCarB, secondCarB, thirdCarB, forthCarB, carNextB, carBackB;
-
-//JcomboBoxes
-    //////////////////////////////////////////////date reservation////////////////////////////////////////////
     private JComboBox pUMCB, pUDCB, pUYCB, rMCB, rDCB, rYCB,
             bMCB, bDCB, bYCB;
     private JComboBox cMCB, cDCB, cYCB;
 
-    //TextFields
-    ////////////////////////////////////////////////customer info//////////////////////////////////////
-private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, statusTF;
+    private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, statusTF;
 
-    ////////////////////////////////////////////////pick a car/////////////////////////////////
     private JTextArea carDetailsTA;
 
-    ///////////////////////////////////////////////receipt/////////////////////////////////////
     private JTextArea receiptA;
 
-    //Constructor (so that the contents are loaded when the constructor is initiated in main class)
     public GUI() {
-        ////////////////////////////////////////////////////////First Panel "Welcome" (mainP)///////////////////////////////////
-        //-------------------------------------------------setting PANEL and LABELS for Welcome section
         pane.setLayout(new CardLayout());
         mainP = new JPanel(null);
         mainP.setBackground(Color.BLACK);
@@ -64,7 +52,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         dateL.setForeground(Color.BLUE);
         dateL.setBounds(360, 210, 150, 25);
         mainP.add(dateL);
-        //--------------------------------------COMBO BOX for current date
         String[] currentMonthCB = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         cMCB = new JComboBox(currentMonthCB);
         cMCB.setBounds(360, 240, 60, 25);
@@ -77,7 +64,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         cYCB = new JComboBox(currentYearCB);
         cYCB.setBounds(490, 240, 60, 25);
         mainP.add(cYCB);
-        //------------------------------------BUTTONS to go NEXT section
         ImageIcon mainNextImage = new ImageIcon("../images/next.GIF");
         mainNextB = new JButton(mainNextImage);
         mainNextB.setBackground(Color.BLUE);
@@ -89,8 +75,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         mainNextB.setActionCommand("NextToReserve");
         mainP.add(mainNextB);
         pane.add(mainP, "welcomeForm");
-        //////////////////////////////////////////////////Second Panel "reserve" (reserveP)//////////////////////////////////////////////
-        //-----------------------------------------LABELS for reservation date.
         reserveP = new JPanel(null);
         reserveP.setBackground(Color.BLUE);
 
@@ -118,8 +102,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         birthDateL.setBounds(60, 150, 100, 100);
         reserveP.add(birthDateL);
 
-        //-------------------------------------------------CHECK BOX for pickup date, return date, birth date
-        //---------------------------------------------Pick up date section
         String[] pickUpMonthCB = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         pUMCB = new JComboBox(pickUpMonthCB);
         pUMCB.setBounds(150, 80, 60, 25);
@@ -129,13 +111,11 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         pUDCB = new JComboBox(pickUpDateCB);
         pUDCB.setBounds(215, 80, 60, 25);
         reserveP.add(pUDCB);
-
+        int setyear=(int)cYCB.getSelectedItem();
         Integer[] pickUpYearCB = {2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,2021,2022};
         pUYCB = new JComboBox(pickUpYearCB);
         pUYCB.setBounds(280, 80, 60, 25);
         reserveP.add(pUYCB);
-
-        //-------------------------------------------return date section
         String[] returnMonthCB = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         rMCB = new JComboBox(returnMonthCB);
         rMCB.setBounds(150, 120, 60, 25);
@@ -145,13 +125,11 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         rDCB = new JComboBox(returnDateCB);
         rDCB.setBounds(215, 120, 60, 25);
         reserveP.add(rDCB);
-
         Integer[] returnYearCB = {2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,2021,2022};
         rYCB = new JComboBox(returnYearCB);
         rYCB.setBounds(280, 120, 60, 25);
         reserveP.add(rYCB);
 
-        //---------------------------------------------birth date section
         String[] birthMonthCB = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         bMCB = new JComboBox(birthMonthCB);
         bMCB.setBounds(150, 190, 60, 25);
@@ -171,7 +149,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         bYCB.setBounds(280, 190, 60, 25);
         reserveP.add(bYCB);
 
-        //---------------------------------------------checker for date
         dateChecker = new JLabel("");
         dateChecker.setFont(new Font("Serif", Font.BOLD, 15));
         dateChecker.setBounds(350, 83, 100, 100);
@@ -182,8 +159,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         ageChecker.setBounds(350, 153, 100, 100);
         reserveP.add(ageChecker);
 
-        //--------------------------------------BUTTONS
-        //-----------------------------------------------to go customer section
         ImageIcon dateNextImage = new ImageIcon("../images/customer.GIF");
         reserveNextB = new JButton(dateNextImage);
         reserveNextB.setBackground(Color.WHITE);
@@ -192,8 +167,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         reserveNextB.setActionCommand("NextToCustomer");
         reserveP.add(reserveNextB);
 
-        //---------------------------------------------------to go back welcome section
-        //ImageIcon dateNextImage = new ImageIcon("../images/Arrow-Right-icon.GIF");
         ImageIcon dateBackImage = new ImageIcon("../images/back.GIF");
         reserveBackB = new JButton(dateBackImage);
         reserveBackB.setBackground(Color.WHITE);
@@ -204,8 +177,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         pane.add(reserveP, "reserveForm");
 
 
-        //////////////////////////////////////////////////////////third Panel "customer" (customerP)/////////////////////////////////////
-        //---------------------------------------------LABELS for customer details
         customerP = new JPanel(null);
         customerP.setBackground(Color.yellow);
 
@@ -264,14 +235,13 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         showAgeL.setBounds(145, 270, 60, 30);
         customerP.add(showAgeL);
 
-        //-------------------------------------TEXT FIELD for customer details and get data from keyboard section
-        firstNameTF = new JTextField("Type First Name Here"); // set as 10 ha
+        firstNameTF = new JTextField("Type First Name Here");
         firstNameTF.setHorizontalAlignment(JTextField.CENTER);
         firstNameTF.setForeground(Color.GRAY);
         firstNameTF.setBounds(150, 60, 250, 30);
         customerP.add(firstNameTF);
 
-        lastNameTF = new JTextField("Type Last Name Here"); // kani pud
+        lastNameTF = new JTextField("Type Last Name Here");
         lastNameTF.setHorizontalAlignment(JTextField.CENTER);
         lastNameTF.setForeground(Color.GRAY);
         lastNameTF.setBounds(150, 95, 250, 30);
@@ -300,8 +270,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         contactTF.setForeground(Color.GRAY);
         contactTF.setBounds(150, 235, 250, 30);
         customerP.add(contactTF);
-
-        //-----------------checker customer
 
         firstNameChecker = new JLabel("");
         firstNameChecker.setFont(new Font("Serif", Font.BOLD, 15));
@@ -333,8 +301,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         contactChecker.setBounds(410, 200, 100, 100);
         customerP.add(contactChecker);
 
-        //-------------------------------------------BUTTONS for customer
-        //----------------------------------------------to go pick a car section
         ImageIcon customerNextImage = new ImageIcon("../images/car.GIF");
         customerNextB = new JButton(customerNextImage);
         customerNextB.setBackground(Color.WHITE);
@@ -346,8 +312,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         customerNextB.setActionCommand("NextToPickCar");
         customerP.add(customerNextB);
 
-        //--------------------------------------------to go back reserve section
-        //ImageIcon datenext = new ImageIcon("../images/Arrow-Right-icon.GIF");
         ImageIcon customerBackImage = new ImageIcon("../images/customer_back.GIF");
         customerBackB = new JButton(customerBackImage);
         customerBackB.setBackground(Color.WHITE);
@@ -365,8 +329,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         ow.setBounds(50, 40, 100, 100);
         pane.add(ow);
 
-        /////////////////////////////////////////////////////forth Panel "pick a car" (carP)//////////////////////////////////////////
-        //--------------------------------LABELS for pick a car
         carP = new JPanel(null);
         carP.setBackground(Color.pink);
 
@@ -376,9 +338,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         carL.setBounds(435, 4, 140, 30);
         carP.add(carL);
 
-        //------------------------------------BUTTONS for pick a car
-        //---------------------------------------------------------Pick Car Buttton]
-        //-------------------------------------first car button
         ImageIcon firstCarImage = new ImageIcon("images/bolan.jpg");
         firstCarB = new JButton(firstCarImage);
         firstCarB.setBackground(Color.WHITE);
@@ -388,8 +347,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         firstCarB.setPressedIcon(firstCarImage);
         firstCarB.setBounds(10, 10, 190, 130);
         carP.add(firstCarB);
-
-        //---------------------------------second car button
         ImageIcon secondCarImage = new ImageIcon("images/revo.png");
         secondCarB = new JButton(secondCarImage);
         secondCarB.setBackground(Color.WHITE);
@@ -399,8 +356,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         secondCarB.setPressedIcon(secondCarImage);
         secondCarB.setBounds(210, 10, 190, 130);
         carP.add(secondCarB);
-
-        //---------------------------------------third car button
         ImageIcon thirdCarImage = new ImageIcon("images/yarise.gif");
         thirdCarB = new JButton(thirdCarImage);
         thirdCarB.setBackground(Color.WHITE);
@@ -411,7 +366,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         thirdCarB.setBounds(10, 150, 190, 130);
         carP.add(thirdCarB);
 
-        //------------------------------------------forth car button
         ImageIcon forthCarImage = new ImageIcon("images/boss.jpg");
         forthCarB = new JButton(forthCarImage);
         forthCarB.setBackground(Color.WHITE);
@@ -421,8 +375,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         forthCarB.setPressedIcon(forthCarImage);
         forthCarB.setBounds(210, 150, 190, 130);
         carP.add(forthCarB);
-
-        //-------------------------------------------------to go receipt section (Final step)
         ImageIcon carNextImage = new ImageIcon("../images/submit.GIF");
         carNextB = new JButton(carNextImage);
         carNextB.setBackground(Color.WHITE);
@@ -433,7 +385,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         carNextB.setPressedIcon(carNextImage);
         carP.add(carNextB);
 
-        //--------------------------------------------------------------------to go back customer section
         ImageIcon carBackImage = new ImageIcon("../images/car_back.GIF");
         carBackB = new JButton(carBackImage);
         carBackB.setBackground(Color.WHITE);
@@ -444,17 +395,13 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         carBackB.setPressedIcon(carBackImage);
         carBackB.setActionCommand("BackToCustomer");
         carP.add(carBackB);
-
-        //-----------------------------------TEXT AREA for pick a car putting details for car when we click buttons over top
         carDetailsTA = new JTextArea(6, 25);
-        carDetailsTA.setText("toyota | 2009 | pick-up | 250\nhonda | 2541 | pick-up | 900");
+        carDetailsTA.setText("Car Details");
         carDetailsTA.setAutoscrolls(true);
         carDetailsTA.setEditable(false);
         carDetailsTA.setBounds(420, 40, 150, 240);
         carP.add(carDetailsTA);
         pane.add(carP, "pickCarForm");
-
-        ///////////////////////////////////////////////////////last panel "recept" (finalP)/////////////////////////////////////
         finalP = new JPanel(null);
 
         receiptA = new JTextArea(2000, 2000);
@@ -467,8 +414,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
 
     }
 
-    ////////////////////////////////////////////////////////////CTROLLERS//////////////////////////////////////////////
-    //-------------------------------------main (go to reserveForm)
     private class mainNextButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
@@ -479,9 +424,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         }
     }
 
-    //------------------------------------------------reserve
-    //---------------------------------------------------go to customerForm
-    //-----------------------------------------------including the validation if requirements are meet for Next Panel
     private class reserveNextButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
@@ -506,14 +448,14 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
 
                 birthMonth = (String)bMCB.getSelectedItem();
                 birthDate = (int)bDCB.getSelectedItem();
-                birthYear = (int)bYCB.getSelectedItem(); //saving dates for transaction, validation for date and age, will prompt to WarningReserve
+                birthYear = (int)bYCB.getSelectedItem();
 
                 aTrans.setTransaction(aCustomer, aCar, currentMonth, currentDate, currentYear, pickUpMonth,
                         pickUpDate, pickUpYear, returnMonth, returnDate, returnYear,
                         birthMonth, birthDate, birthYear);
-                showAgeL.setText(aTrans.toStringAge()); // show the text of age from class
+                showAgeL.setText(aTrans.toStringAge());
 
-                if(!aTrans.toStringDateChecker().equals("TRUE")) { //check if valid or not for pick date and return date
+                if(!aTrans.toStringDateChecker().equals("TRUE")) {
                     dateChecker.setForeground(Color.RED);
                     dateChecker.setText("Invalid!");
                 }
@@ -523,7 +465,7 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
                     dateChecker.setText("Valid");
                 }
 
-                if(!aTrans.toStringAgeChecker().equals("TRUE")) { // for age validation
+                if(!aTrans.toStringAgeChecker().equals("TRUE")) {
                     ageChecker.setForeground(Color.RED);
                     ageChecker.setText("Invalid!");
                 }
@@ -533,11 +475,10 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
                     ageChecker.setText("Valid");
                 }
 
-                if(aTrans.toStringDateChecker().equals("TRUE") && aTrans.toStringAgeChecker().equals("TRUE")) { //checker to proceed next panel
-                    cL.show(pane, "customerForm");
+                if(aTrans.toStringDateChecker().equals("TRUE") && aTrans.toStringAgeChecker().equals("TRUE")) {          cL.show(pane, "customerForm");
                 }
 
-                else { //pop up window for warning to customer
+                else {
                     if(openWarningReserve == null){
                         openWarningReserve = new WarningReserve();
                         ImageIcon warningReserveImage = new ImageIcon("../images/warning_top_icon.GIF");
@@ -556,8 +497,6 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
             }
         }
     }
-
-    //-------------------------------------------------go back to welcomeForm
     private class reserveBackButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
@@ -568,14 +507,10 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         }
     }
 
-    //------------------------------------------customer
-    //-----------------------------------------------go to pickCarForm
-    //-----------------------------------------------including the validation if requirements are meet for Next Panel
     private class customerNextButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
             if(event.getActionCommand().equals("NextToPickCar")) {
-
                 String firstName, lastName, gender, status, location, contact;
 
                 firstName = firstNameTF.getText();
@@ -676,9 +611,7 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
             }
         }
     }
-
-    //----------------------------------------------go back to reserveForm
-    private class customerBackButton implements ActionListener{
+ private class customerBackButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
 
@@ -688,26 +621,21 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         }
     }
 
-    //--------------------------------------------car
-    //----------------------------------------------------go back to customerForm
-    private class firstCarButton implements ActionListener{ //when its clicked show up the car detail of Van
+    private class firstCarButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
-
             carDetailsTA.setText("");
             carDetailsTA.setText("Brand: Suzki\nPlate #: AGS-536\nType: Van\nModel: 2009\nColor: white\nRental Price: 3500.00\n\n-Used for tourists, family \n and commercial purpose. \nThe Van can \nhold onto 8 persons \nexcluding the driver.");
             carNextB.setActionCommand("Car1");
         }
     }
-    private class secondCarButton implements ActionListener{ //button to show pick-up details
-        public void actionPerformed(ActionEvent event) {
-
+    private class secondCarButton implements ActionListener{        public void actionPerformed(ActionEvent event) {
             carDetailsTA.setText("");
             carDetailsTA.setText("Brand: Toyota\nPlate #: AQQ-644\nType: Pick-up\nModel: Revo\nColor: Blue\nRental Price: 16300.00\n\n-Oftenly used for travelers \n for hilly-areas.Best for off-road \nand bumpy roads.");
             carNextB.setActionCommand("Car2");
         }
     }
 
-    private class thirdCarButton implements ActionListener{ //button to show Taxi details
+    private class thirdCarButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
 
             carDetailsTA.setText("");
@@ -716,7 +644,7 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         }
     }
 
-    private class forthCarButton implements ActionListener{ //button to show Bus details
+    private class forthCarButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
 
             carDetailsTA.setText("");
@@ -724,19 +652,18 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
             carNextB.setActionCommand("Car4");
         }
     }
-
     private class finalStepButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
 
-            if(event.getActionCommand().equals("Car1")) { //passing the pick-up details to car details class and final transactions.
+            if(event.getActionCommand().equals("Car1")) {
 
                 String carType = "Van", carModel = "2009";
                 double carPrice = 3500.00;
 
-                aCar.setCar(carType, carModel, carPrice); //setDetails
+                aCar.setCar(carType, carModel, carPrice);
 
-                try { //to save in file Transaction_Inventory
+                try {
                     aTrans.saveToFile();
                 }catch (IOException e) {
                     e.printStackTrace();
@@ -744,39 +671,39 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
                 receiptA.setText(aTrans.toStringReceipt());
                 cL.show(pane, "receipt");
             }
-            else if(event.getActionCommand().equals("Car2")) { //pass the details of selected car to car details
+            else if(event.getActionCommand().equals("Car2")) {
                 String carType = "Pick-up", carModel = "2013";
                 double carPrice = 15000.00;
 
                 aCar.setCar(carType, carModel, carPrice);
 
-                try { //to save in file Transaction_Inventory
+                try {
                     aTrans.saveToFile();
                 }catch (IOException e) {}
                 receiptA.setText(aTrans.toStringReceipt());
                 cL.show(pane, "receipt");
             }
 
-            else if(event.getActionCommand().equals("Car3")) { //pass Van details to car details
+            else if(event.getActionCommand().equals("Car3")) {
 
                 String carType = "Taxi", carModel = "2022";
                 double carPrice = 5000.00;
 
                 aCar.setCar(carType, carModel, carPrice);
-                try { //to save in file Transaction_Inventory
+                try {
                     aTrans.saveToFile();
                 }catch (IOException e) {}
                 receiptA.setText(aTrans.toStringReceipt());
                 cL.show(pane, "receipt");
             }
 
-            else if(event.getActionCommand().equals("Car4")) { //pass mr.bean car details to car details
+            else if(event.getActionCommand().equals("Car4")) {
 
                 String carType = "Mehran", carModel = "2007";
                 double carPrice = 3500.00;
 
                 aCar.setCar(carType, carModel, carPrice);
-                try { //to save in file Transaction_Inventory
+                try {
           aTrans.saveToFile();
                 }catch (IOException e) {}
 
@@ -784,7 +711,7 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
                 cL.show(pane, "receipt");
             }
 
-            else { //if customer havent yet pick a car, show's the warning information
+            else {
                 if(openWarningCustomer == null){
                     openWarningCustomer = new WarningThread();
                     ImageIcon warningCarImage = new ImageIcon("../images/warning_top_icon.GIF");
@@ -803,7 +730,7 @@ private JTextField firstNameTF, lastNameTF, locationTF, contactTF, genderTF, sta
         }
     }
 
-    private class carBackButton implements ActionListener{ //go back to customer form when it is clicked and performed
+    private class carBackButton implements ActionListener{
         public void actionPerformed(ActionEvent event) {
             CardLayout cL = (CardLayout)pane.getLayout();
 

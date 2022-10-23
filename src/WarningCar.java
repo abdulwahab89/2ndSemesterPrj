@@ -4,7 +4,7 @@ public class WarningCar extends JFrame {
     private JPanel warningP;
     private JLabel textL, iconL;
 
-    private Transaction aTrans = new Transaction(); //access my class Transaction as global declaration
+    private Transaction aTrans = new Transaction();
     WarningThread myRunnable=new WarningThread();
     Thread t1=new Thread(myRunnable);
     public WarningCar(){
